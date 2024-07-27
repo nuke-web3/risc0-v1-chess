@@ -7,7 +7,7 @@ edition = "2021"
 chess-core = { path = "core" }
 chess-methods = { path = "methods" }
 clap = { version = "4.0", features = ["derive"] }
-risc0-zkvm = "1.0.1"
+risc0-zkvm = "1.0"
 shakmaty = "0.27"
 
 [features]
