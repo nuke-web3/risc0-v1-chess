@@ -20,10 +20,10 @@ use shakmaty::{fen::Fen, CastlingMode, Chess, FromSetup, Position, Setup};
 
 #[derive(Parser)]
 struct Cli {
-    #[arg(id = "MOVE", default_value = "Qxf7")]
-    mv: String,
+    #[arg(id = "MOVE", default_values = ["Nf6","Qxf7"])]
+    moves: Vec<String>,
 
-    #[arg(default_value = "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4")]
+    #[arg(default_value = "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 4 4")]
     board: String,
 }
 
@@ -32,7 +32,7 @@ fn main() {
 
     let inputs = Inputs {
         board: args.board,
-        mv: args.mv,
+        moves: args.moves,
     };
 
     let receipt = chess(&inputs);
@@ -46,9 +46,10 @@ fn main() {
     let pos = Chess::from_setup(setup, CastlingMode::Standard).unwrap();
 
     println!(
-        "There is a checkmate for {:?} in this position:\n{:?}",
+        "{:?}'s move with starting board of:\n\n{:?}\n🨀 The pover knows a set of moves resulting in a checkmate in {} turns!",
         pos.turn(),
-        pos.board()
+        pos.board(),
+        inputs.moves.len()
     );
 }
 
@@ -75,12 +76,12 @@ mod tests {
     #[test]
     fn main() {
         const TEST_BOARD: &str =
-            "r1bqkb1r/pppp1ppp/2n2n2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4";
-        const TEST_MOVE: &str = "Qxf7";
+            "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 4 4";
+        const TEST_MOVES: [&str; 2] = ["Nf6", "Qxf7"];
 
         chess(&Inputs {
             board: String::from(TEST_BOARD),
-            mv: String::from(TEST_MOVE),
+            moves: TEST_MOVES.map(|m| m.to_string()).to_vec(),
         });
     }
 }
